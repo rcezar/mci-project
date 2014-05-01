@@ -226,7 +226,6 @@ class Shipment(models.Model):
     hospital = models.ForeignKey(Hospital)
     vehicle = models.ForeignKey(Vehicle)
     route = models.CharField(max_length=200, null = True, blank = True)
-    #crew = models.ManyToManyField(Person, through='Crew', through_fields=('shipment','person'))
     shipment_crew = models.ManyToManyField(Person, through='Crew')
 
 class Crew(models.Model):
