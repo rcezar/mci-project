@@ -2,7 +2,6 @@ from django.contrib import admin
 from mci.models import *
 
 # Register your models here.
-# admin.site.register(Victim)
 
 class VictimAdmin(admin.ModelAdmin):
     fieldsets = [
