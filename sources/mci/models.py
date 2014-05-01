@@ -35,7 +35,14 @@ class Person(models.Model):
         return self.person_name
 
 class Staff(models.Model):
+    staff_name = models.CharField(max_length=200)
+    staff_staffmembership = models.ManyToManyField(Person, through='StaffMembership')
+    def __unicode__(self):
+        return self.staff_name
+
+class StaffMembership(models.Model):
     person = models.ForeignKey(Person)
+    staff = models.ForeignKey(Staff)
     role = EnumField(values=(
         'MEDICAL_COORDINATOR',
         'OPERATIONAL_COORDINATOR',
@@ -45,6 +52,7 @@ class Staff(models.Model):
         'MEMBER')) 
     def __unicode__ (self):
         return self.person.person_name + ' -  ' + self.role
+
 
 class Incident(models.Model):
     incident_location = models.CharField(max_length=200,null = True)
@@ -71,11 +79,23 @@ class PersonalData(models.Model):
     phone_number = models.CharField(max_length=200, null = True, blank = True)
     #TODO enum list with troubled-health-related religion 
     religion = models.CharField(max_length=200, null = True, blank = True) 
-    comments = models.CharField(max_length=400, null = True, blank = True) 
+    comments = models.CharField(max_length=400, null = True, blank = True)
+    def __unicode__ (self):
+        s = 'n/a'
+        n = 'n/a'
+        if self.victim_name:
+            n = self.victim_name 
+        if self.gender == 'MALE':
+            s = 'M'
+        elif self.gender == 'FEMALE':
+            s = 'F'
+        return n + ' -  ' + s + ' - ' + self.age
 
 class Allergy(models.Model):
     personal_data = models.ForeignKey(PersonalData, related_name='allergies')
     allergy_name = models.CharField(max_length=200)
+    def __unicode__ (self):
+        return self.allergy_name
 
 class Victim(models.Model):
     incident = models.ForeignKey(Incident)
@@ -87,6 +107,8 @@ class Victim(models.Model):
             'TREATMENT',
             'TRANSPORT'))
     personal_data = models.ForeignKey(PersonalData)
+    def __unicode__(self):
+       return 'tag ' + unicode(self.tag_id) + ' - ' + unicode(self.personal_data)
 
 class Location(models.Model):
     victim = models.ForeignKey(Victim, related_name='locations')
@@ -136,6 +158,8 @@ class Photo(models.Model):
     
 class Drug(models.Model):
     drug_name = models.CharField(max_length=200)
+    def __unicode__(self):
+       return self.drug_name
     
 class UsedMedicine(models.Model):
     victim = models.ForeignKey(Victim, related_name='used_medicines')
@@ -190,6 +214,8 @@ class Hospital(models.Model):
     trauma_specialty = models.CharField(max_length=200, null = True, blank = True)
     phone = models.CharField(max_length=200, null = True, blank = True)
     contact_name = models.CharField(max_length=200, null = True, blank = True)
+    def __unicode__(self):
+        return self.hospital_name
 
 class Vehicle(models.Model):
     vehicle_number = models.CharField(max_length=200, null = True, blank = True)
@@ -206,4 +232,3 @@ class Shipment(models.Model):
 class Crew(models.Model):
     shipment = models.ForeignKey(Shipment)
     person = models.ForeignKey(Person)
-
