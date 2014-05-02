@@ -4,6 +4,7 @@ from mci.models import *
 # Register your models here.
 class StatusInfoInline(admin.StackedInline):
     model = StatusInfo
+    extra = 0
 
 class VictimAdmin(admin.ModelAdmin):
 
