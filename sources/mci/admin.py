@@ -2,6 +2,8 @@ from django.contrib import admin
 from mci.models import *
 
 # Register your models here.
+class StatusInfoInline(admin.TabularInLine):
+    model = StatusInfo
 
 class VictimAdmin(admin.ModelAdmin):
 
@@ -10,6 +12,9 @@ class VictimAdmin(admin.ModelAdmin):
         ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
     list_display = ('tag_id', 'personal_data')
+    inlines = [
+        StatusInfoInline,
+    ]
 
 admin.site.register(Victim, VictimAdmin)
 
