@@ -40,7 +40,7 @@ class Person(models.Model):
 
 class Staff(models.Model):
     staff_name = models.CharField(max_length=200)
-    staff_staffmembership = models.ManyToManyField(Person, through='StaffMembership')
+    members = models.ManyToManyField(Person, through='StaffMembership')
 
     def __unicode__(self):
         return self.staff_name
@@ -48,7 +48,7 @@ class Staff(models.Model):
 
 class StaffMembership(models.Model):
     person = models.ForeignKey(Person)
-    staff = models.ForeignKey(Staff)
+    staff = models.ForeignKey(Staff, related_name='memberships')
     role = EnumField(values=(
         'MEDICAL_COORDINATOR',
         'OPERATIONAL_COORDINATOR',
