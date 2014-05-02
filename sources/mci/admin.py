@@ -9,7 +9,6 @@ class StatusInfoInline(admin.TabularInline):
 
 
 class VictimAdmin(admin.ModelAdmin):
-    @staticmethod
     def last_status(self, instance):
         try:
             s = sorted(list(instance.status_info.all()),
