@@ -2,9 +2,9 @@ from django.contrib import admin
 from mci.models import *
 
 # Register your models here.
-class StatusInfoInline(admin.StackedInline):
+class StatusInfoInline(admin.TabularInline):
     model = StatusInfo
-    extra = 0
+    extra = 1
 
 
 
@@ -23,6 +23,7 @@ class VictimAdmin(admin.ModelAdmin):
         (None,          {'fields': ['tag_id', 'creation_time']}),
         ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
+
     list_display = ('tag_id', 'last_status', 'personal_data')
     inlines = [
         StatusInfoInline,
