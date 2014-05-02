@@ -11,10 +11,13 @@ class StatusInfoInline(admin.TabularInline):
 class VictimAdmin(admin.ModelAdmin):
 
     def last_status(self, instance):
-        s =sorted(list(instance.status_info.all()),
-                  key=lambda x: x.timestamp,
-                  reverse = True)
-        return s[0].status
+        try:
+            s =sorted(list(instance.status_info.all()),
+                      key=lambda x: x.timestamp,
+                      reverse = True)
+            return s[0].status
+        except:
+            return 'N/A'
 
     readonly_fields = ('last_status',)
     last_status.short_description = 'Last Status'
