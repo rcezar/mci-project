@@ -2,7 +2,7 @@ from django.contrib import admin
 from mci.models import *
 
 # Register your models here.
-class StatusInfoInline(admin.TabularInline):
+class StatusInfoInline(admin.StackedInline):
     model = StatusInfo
 
 class VictimAdmin(admin.ModelAdmin):
