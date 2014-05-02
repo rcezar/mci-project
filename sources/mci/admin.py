@@ -1,30 +1,30 @@
 from django.contrib import admin
 from mci.models import *
 
+
 # Register your models here.
 class StatusInfoInline(admin.TabularInline):
     model = StatusInfo
     extra = 1
 
 
-
 class VictimAdmin(admin.ModelAdmin):
-
+    @staticmethod
     def last_status(self, instance):
         try:
-            s =sorted(list(instance.status_info.all()),
-                      key=lambda x: x.timestamp,
-                      reverse = True)
+            s = sorted(list(instance.status_info.all()),
+                       key=lambda x: x.timestamp,
+                       reverse=True)
             return s[0].status
-        except:
+        except KeyError:
             return 'N/A'
 
     readonly_fields = ('last_status',)
     last_status.short_description = 'Last Status'
 
     fieldsets = [
-        (None,          {'fields': ['tag_id', 'creation_time']}),
-        ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
+        (None, {'fields': ['tag_id', 'creation_time']}),
+        ('More info', {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
 
     list_display = ('tag_id', 'last_status', 'personal_data')
@@ -32,16 +32,20 @@ class VictimAdmin(admin.ModelAdmin):
         StatusInfoInline,
     ]
 
+
 admin.site.register(Victim, VictimAdmin)
 
 
 class UsedMedicineAdmin(admin.ModelAdmin):
-     list_display = ('victim', 'drug', 'dose', 'agent', 'timestamp')
-     
+    list_display = ('victim', 'drug', 'dose', 'agent', 'timestamp')
+
+
 admin.site.register(UsedMedicine, UsedMedicineAdmin)
 
+
 class HospitalAdmin(admin.ModelAdmin):
-    list_display=('hospital_name', 'beds', 'trauma_specialty', 'address' )
+    list_display = ('hospital_name', 'beds', 'trauma_specialty', 'address' )
+
 
 admin.site.register(Hospital, HospitalAdmin)
 
