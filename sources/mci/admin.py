@@ -6,13 +6,24 @@ class StatusInfoInline(admin.StackedInline):
     model = StatusInfo
     extra = 0
 
+
+
 class VictimAdmin(admin.ModelAdmin):
+
+    def last_status(self, instance):
+        s =sorted(list(instance.status_info.all()),
+                  key=lambda x: x.timestamp,
+                  reverse = True)
+        return s[0].status
+
+    readonly_fields = ('last_status',)
+    last_status.short_description = 'Last Status'
 
     fieldsets = [
         (None,          {'fields': ['tag_id', 'creation_time']}),
         ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
-    list_display = ('tag_id', 'personal_data')
+    list_display = ('tag_id', 'last_status', 'personal_data')
     inlines = [
         StatusInfoInline,
     ]
