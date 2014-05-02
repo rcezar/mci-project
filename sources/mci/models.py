@@ -102,13 +102,20 @@ class Victim(models.Model):
     tag_id = models.IntegerField(default=0)
     creation_time = models.DateTimeField('Creation Time')
     creation_agent = models.ForeignKey(User)
+    personal_data = models.ForeignKey(PersonalData)
+    def __unicode__(self):
+       return 'tag ' + unicode(self.tag_id) + ' - ' + unicode(self.personal_data)
+
+class StatusInfo(models.Model):
+    victim = models.ForeignKey(Victim, related_name='statusinfo')
     status = EnumField(values=(
             'TRIAGE',
             'TREATMENT',
             'TRANSPORT'))
-    personal_data = models.ForeignKey(PersonalData)
+    agent = models.ForeignKey(User)
+    timestamp = models.DateTimeField()
     def __unicode__(self):
-       return 'tag ' + unicode(self.tag_id) + ' - ' + unicode(self.personal_data)
+        return self.status
 
 class Location(models.Model):
     victim = models.ForeignKey(Victim, related_name='locations')

@@ -4,11 +4,12 @@ from mci.models import *
 # Register your models here.
 
 class VictimAdmin(admin.ModelAdmin):
+
     fieldsets = [
-        (None,          {'fields': ['tag_id', 'status', 'creation_time']}),
+        (None,          {'fields': ['tag_id', 'creation_time']}),
         ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
-    list_display = ('tag_id', 'status', 'personal_data')
+    #list_display = ('tag_id', 'status', 'personal_data')
 
 admin.site.register(Victim, VictimAdmin)
 
@@ -23,7 +24,7 @@ class HospitalAdmin(admin.ModelAdmin):
 
 admin.site.register(Hospital, HospitalAdmin)
 
-
+admin.site.register(StatusInfo)
 admin.site.register(Incident)
 admin.site.register(Staff)
 admin.site.register(StaffMembership)
