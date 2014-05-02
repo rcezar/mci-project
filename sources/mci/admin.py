@@ -15,7 +15,7 @@ class VictimAdmin(admin.ModelAdmin):
                        key=lambda x: x.timestamp,
                        reverse=True)
             return s[0].status
-        except KeyError:
+        except IndexError:
             return 'N/A'
 
     readonly_fields = ('last_status',)

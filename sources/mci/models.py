@@ -112,7 +112,7 @@ class Allergy(models.Model):
 
 
 class Victim(models.Model):
-    incident = models.ForeignKey(Incident)
+    incident = models.ForeignKey(Incident, related_name='victims')
     tag_id = models.IntegerField(default=0)
     creation_time = models.DateTimeField('Creation Time')
     creation_agent = models.ForeignKey(User)
