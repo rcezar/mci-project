@@ -6,7 +6,7 @@ from mci.models import *
 class VictimAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        (None,          {'fields': ['tag_id', 'creation_time']}),
+        (None,          {'fields': ['tag_id', 'status_info', 'creation_time']}),
         ('More info',   {'fields': ['incident', 'creation_agent', 'personal_data']}),
     ]
     #list_display = ('tag_id', 'status', 'personal_data')

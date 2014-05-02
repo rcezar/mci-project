@@ -107,7 +107,7 @@ class Victim(models.Model):
        return 'tag ' + unicode(self.tag_id) + ' - ' + unicode(self.personal_data)
 
 class StatusInfo(models.Model):
-    victim = models.ForeignKey(Victim, related_name='statusinfo')
+    victim = models.ForeignKey(Victim, related_name='status_info')
     status = EnumField(values=(
             'TRIAGE',
             'TREATMENT',
