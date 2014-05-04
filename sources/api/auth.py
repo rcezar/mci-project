@@ -1,5 +1,3 @@
-from mci.models import MCIUser
-from rest_framework.response import Response
 from django.http import HttpResponse
 from rest_framework import status, serializers
 from base64 import b64decode
@@ -24,7 +22,7 @@ class MCIAuthenticationMiddleware(object):
                     request.api_user = user
 
                 # comment
-            except KeyError, IndexError:
+            except (KeyError, IndexError):
                 response = HttpResponse(status=status.HTTP_401_UNAUTHORIZED, content_type='application/json')
                 response['WWW-Authenticate'] = 'Basic realm="MCI RESTful API"'
                 response.content = '{info: "Please use basic authentication", success: false}'
