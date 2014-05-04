@@ -31,9 +31,21 @@ class VictimSerializer(serializers.ModelSerializer):
 class VictimNestedViewSet(viewsets.ViewSet):
     model = Victim
 
-    def list(self, nested_1_pk=None):
+    def list(self, request, nested_1_pk=None):
+
+        tag_id = request.QUERY_PARAMS.get('tag_id', None)
+
         incident = Incident.objects.get(pk=nested_1_pk)
-        victims = incident.victims.all()
+        if tag_id is None:
+            victims = incident.victims.all()
+        else:
+            print "entrou"
+            try:
+                tag_id = long(tag_id)
+            except ValueError:
+                return Response([])
+
+            victims = incident.victims.filter(tag_id=tag_id)
         serializer = VictimSerializer(victims, many=True)
         return Response(serializer.data)
 
