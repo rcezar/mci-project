@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.models import User as DjangoDefaultUser
 from mci.models import *
 
 # Register your models here.
@@ -53,6 +54,7 @@ admin.site.register(Incident)
 admin.site.register(Staff)
 admin.site.register(StaffMembership)
 admin.site.register(Person)
+#admin.site.unregister(DjangoDefaultUser)
 admin.site.register(MCIUser)
 admin.site.register(Location)
 admin.site.register(Photo)

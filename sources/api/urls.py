@@ -1,12 +1,11 @@
 from django.conf.urls import patterns, include, url
-from rest_framework import viewsets, serializers, status
+from rest_framework import viewsets, serializers, status, views
 from rest_framework.response import Response
 from mci.models import *
 from rest_framework_nested import routers
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.core import serializers as core_serializers
-
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,6 +96,17 @@ class StaffMembershipNestedViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')
+
+class AuthenticateViewSet(viewsets.ViewSet):
+    permission_classes = []
+    def list(self, request):
+        return Response({"success": True, "user_info": UserSerializer(request.api_user).data})
+
+
 class PersonViewSet(viewsets.ModelViewSet):
     model = Person
 class StaffViewSet(viewsets.ModelViewSet):
@@ -115,6 +125,9 @@ class StaffMembershipViewSet(viewsets.ModelViewSet):
     #serializer_class = StaffMembershipSerializer
 
 ##Routers
+router_authentication = routers.SimpleRouter()
+router_authentication.register(r'authenticate', AuthenticateViewSet, base_name=r'authenticate')
+
 router_staffmember = routers.SimpleRouter()
 router_staffmember.register(r'staffmembers', StaffMembershipViewSet)
 
@@ -137,6 +150,7 @@ router_nested_staff = routers.NestedSimpleRouter(router_staff, r'staffs')
 router_nested_staff.register(r'members', StaffMembershipNestedViewSet)
 
 urlpatterns = patterns('',
+                       url(r'^', include(router_authentication.urls)),
                        url(r'^', include(router_staffmember.urls)),
                        url(r'^', include(router_staff.urls)),
                        url(r'^', include(router_nested_staff.urls)),

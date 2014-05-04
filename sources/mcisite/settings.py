@@ -47,6 +47,7 @@ INSTALLED_APPS = (
 #CUSTOM_USER_MODEL = 'mci.models.MCIUser'
 
 MIDDLEWARE_CLASSES = (
+    'api.auth.MCIAuthenticationMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

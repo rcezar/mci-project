@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django import forms
 
 # Defining class Enum
 class EnumField(models.Field):
@@ -71,8 +72,13 @@ class Incident(models.Model):
         return self.incident_name
 
 
-class MCIUser(User):
+
+class MCIUser(models.Model):
+    class Meta:
+        verbose_name = 'MCIUser'
+    user = models.ForeignKey(User, related_name='mci_user')
     person = models.ForeignKey(Person, null=True, blank=True)
+    #password = models.CharField(max_length=200)
     #TODO change language to an ENUM type to system's available language
     language = models.CharField(max_length=10)
 
