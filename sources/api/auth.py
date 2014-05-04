@@ -17,6 +17,7 @@ class MCIAuthenticationMiddleware(object):
 
                 if user is None:
                     response = HttpResponse(status=status.HTTP_401_UNAUTHORIZED, content_type='application/json')
+                    response['WWW-Authenticate'] = 'Basic realm="MCI RESTful API"'
                     response.content = '{info: "Invalid user or password", success: false}'
                     return response
                 else:
@@ -25,5 +26,6 @@ class MCIAuthenticationMiddleware(object):
                 # comment
             except KeyError, IndexError:
                 response = HttpResponse(status=status.HTTP_401_UNAUTHORIZED, content_type='application/json')
+                response['WWW-Authenticate'] = 'Basic realm="MCI RESTful API"'
                 response.content = '{info: "Please use basic authentication", success: false}'
                 return response
