@@ -109,7 +109,7 @@ class StaffMembershipNestedViewSet(viewsets.ViewSet):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', 'id')
 
 
 class AuthenticateViewSet(viewsets.ViewSet):
