@@ -181,6 +181,11 @@ class VictimViewSet(viewsets.ModelViewSet):
     serializer_class = VictimSerializer
 
 
+class TraumaViewSet(viewsets.ModelViewSet):
+    model = Trauma
+    serializer_class = TraumaSerializer
+
+
 class StaffMembershipViewSet(viewsets.ModelViewSet):
     model = StaffMembership
 
