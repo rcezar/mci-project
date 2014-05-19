@@ -1,6 +1,8 @@
 from rest_framework import viewsets, serializers, status
+from rest_framework.views import  APIView
 from rest_framework.response import Response
 from mci.models import *
+from django.db.models import get_model
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -18,6 +20,49 @@ class StaffMembershipSerializer(serializers.ModelSerializer):
 class PersonalDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalData
+
+
+class TraumaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trauma
+
+class TraumaNestedViewSet(viewsets.ViewSet):
+    model = Trauma
+
+    def list(self, request, nested_1_pk=None):
+        victim = Victim.objects.get(pk=nested_1_pk)
+        traumas = victim.traumas.all()
+        serializer = TraumaSerializer(traumas, many=True)
+
+        return Response(serializer.data)
+
+    def create(self, request, nested_1_pk):
+        victim = Victim.objects.get(pk=nested_1_pk)
+        try:
+            trauma_type = request.DATA['trauma_type']
+            bodypart = request.DATA['bodypart']
+            ai_type = request.DATA['ai_type']
+            ai_bodypart = request.DATA['ai_bodypart']
+            description = request.DATA['description']
+            agent = request.DATA['agent']
+            timestamp = request.DATA['timestamp']
+        except KeyError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        trauma = Trauma()
+        user = User.objects.get(pk=agent)
+        trauma.victim = victim
+        trauma.trauma_type = trauma_type
+        trauma.bodypart = bodypart
+        trauma.ai_type = ai_type
+        trauma.ai_bodypart = ai_bodypart
+        trauma.description =  description
+        trauma.agent = user
+        trauma.timestamp = timestamp
+        trauma.save()
+        serializer = TraumaSerializer(trauma)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 
 
 class VictimSerializer(serializers.ModelSerializer):
@@ -118,7 +163,6 @@ class AuthenticateViewSet(viewsets.ViewSet):
     def list(self, request):
         return Response({"success": True, "user_info": UserSerializer(request.api_user).data})
 
-
 class PersonViewSet(viewsets.ModelViewSet):
     model = Person
 
@@ -139,3 +183,9 @@ class VictimViewSet(viewsets.ModelViewSet):
 
 class StaffMembershipViewSet(viewsets.ModelViewSet):
     model = StaffMembership
+
+class ListTraumaMetadata(viewsets.ViewSet):
+    def list(self, request):
+        return Response({'trauma_types': get_model('mci','Trauma')._meta.get_field_by_name('trauma_type')[0].values,
+                         'bodyparts' : get_model('mci','Trauma')._meta.get_field_by_name('bodypart')[0].values,
+                         })

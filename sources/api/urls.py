@@ -28,6 +28,12 @@ router_nested_incident.register(r'victims', VictimNestedViewSet)
 router_nested_staff = routers.NestedSimpleRouter(router_staff, r'staffs')
 router_nested_staff.register(r'members', StaffMembershipNestedViewSet)
 
+router_nested_victim = routers.NestedSimpleRouter(router_victim, r'victims')
+router_nested_victim.register(r'traumas', TraumaNestedViewSet)
+
+router_list_trauma_metadata = routers.SimpleRouter()
+router_list_trauma_metadata.register(r'list_trauma_metadata', ListTraumaMetadata, base_name=r'list_trauma_metadata')
+
 urlpatterns = patterns('',
                        url(r'^', include(router_authentication.urls)),
                        url(r'^', include(router_staffmember.urls)),
@@ -37,4 +43,6 @@ urlpatterns = patterns('',
                        url(r'^', include(router_person.urls)),
                        url(r'^', include(router_incident.urls)),
                        url(r'^', include(router_nested_incident.urls)),
+                       url(r'^', include(router_list_trauma_metadata.urls)),
+                       url(r'^', include(router_nested_victim.urls))
                        )
